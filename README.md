@@ -7,5 +7,7 @@ SoftUni JS Back End Course Project
  - [x] Dev script
  - [x] Debugging
  - [x] Add basic http server
- - [ ] Show home page
+ - [x] Show home page
+ - [x] Add css
+ - [x] Extract html and css into separate js files
     
