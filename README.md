@@ -5,4 +5,5 @@ SoftUni JS Back End Course Project
 
  - [x] Initialize NodeJS Preject 
  - [x] Dev script
+ - [x] Debugging
     
