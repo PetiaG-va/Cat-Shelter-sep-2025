@@ -12,6 +12,9 @@ SoftUni JS Back End Course Project
  - [x] Extract html and css into separate js files
  - [x] Read home html from FS
  - [x] Read site css from FS
- - [x] create add breed page
+ - [x] Create add breed page
  - [x] Create add cat page
+ - [x] Render view generic function
+ - [ ] Render dynamic cats on home page
+ - [ ] Add cats from add-cats page
     
