@@ -15,6 +15,6 @@ SoftUni JS Back End Course Project
  - [x] Create add breed page
  - [x] Create add cat page
  - [x] Render view generic function
- - [ ] Render dynamic cats on home page
+ - [x] Render dynamic cats on home page
  - [ ] Add cats from add-cats page
     
