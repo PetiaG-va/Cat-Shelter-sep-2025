@@ -2,16 +2,19 @@ import http from 'http';
 import fs from 'fs/promises';
 
 const server = http.createServer(async (req, res) => {
-    
+    let html;
+
     switch (req.url) {
         case '/':
-            const homeHtml = await homeView();
+            html = await homeView();
+            break;
 
-            res.writeHead(200, {
-                'content-type': 'text/html'
-            })
-
-            res.write(homeHtml);
+        case '/cats/add-breed':
+            html = await addBreedView();
+            break;
+        
+        case '/cats/add-cat':
+            html = await addCatView();
             break;
 
         case '/styles/site.css':
@@ -22,19 +25,17 @@ const server = http.createServer(async (req, res) => {
             });
 
             res.write(siteCss);
-            break;
-        case '/cats/add-breed':
-            const html = await addBreedView();
-            
-            res.writeHead(200, {
-                'content-type': 'text/html'
-            })
+            return res.end();
 
-            res.write(html);
-            break;
         default:
-            break;
+            return res.end();
     }
+
+    res.writeHead(200, {
+        'content-type': 'text/html'
+    });
+
+    res.write(html);
 
     res.end();
 });
@@ -45,10 +46,14 @@ async function homeView() {
 };
 
 async function addBreedView() {
-    const html = await fs.readFile('./src/views/addBreed.html', {encoding: 'utf-8'});
+    const html = await fs.readFile('./src/views/addBreed.html', { encoding: 'utf-8' });
     return html;
 }
 
+async function addCatView() {
+    const html = await fs.readFile('./src/views/addCat.html');
+    return html;
+}
 server.listen(5000);
 
 console.log("Server is listening on http://localhost:5000...");
