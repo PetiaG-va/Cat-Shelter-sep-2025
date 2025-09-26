@@ -18,7 +18,7 @@ const server = http.createServer(async (req, res) => {
             break;
 
         case '/styles/site.css':
-            const siteCss = await fs.readFile('./src/styles/site.css', { encoding: 'utf-8' });
+            const siteCss = await readFile('./src/styles/site.css');
 
             res.writeHead(200, {
                 'content-type': 'text/css'
@@ -40,22 +40,22 @@ const server = http.createServer(async (req, res) => {
     res.end();
 });
 
-function renderView(path) {
+function readFile(path) {
     return fs.readFile(path, {encoding: "utf-8"});
 }
 
 async function homeView() {
-    const html = await renderView('./src/views/home/index.html');
+    const html = await readFile('./src/views/home/index.html');
     return html;
 };
 
 async function addBreedView() {
-    const html = await renderView('./src/views/addBreed.html');
+    const html = await readFile('./src/views/addBreed.html');
     return html;
 }
 
 async function addCatView() {
-    const html = await renderView('./src/views/addCat.html');
+    const html = await readFile('./src/views/addCat.html');
     return html;
 }
 server.listen(5000);
