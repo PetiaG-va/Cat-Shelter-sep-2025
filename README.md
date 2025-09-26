@@ -10,4 +10,5 @@ SoftUni JS Back End Course Project
  - [x] Show home page
  - [x] Add css
  - [x] Extract html and css into separate js files
+ - [x] Read home html from FS
     
