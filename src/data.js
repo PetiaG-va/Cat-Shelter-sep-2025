@@ -9,7 +9,10 @@ export async function getCats() {
 
 export async function saveCat(cat) {
     // Add cat to cats array
-    db.cats.push(cat);
+    db.cats.push({
+        id: db.cats[db.cats.length -1].id + 1,
+        ...catData
+    });
 
     await saveDb();
 }
