@@ -1,6 +1,6 @@
 import http from 'http';
 import fs from 'fs/promises';
-import { getCats, saveCat } from './data.js';
+import { getCats, saveCat, getCat, updateCat } from './data.js';
 
 const server = http.createServer(async (req, res) => {
     let html;
@@ -16,9 +16,18 @@ const server = http.createServer(async (req, res) => {
         
         req.on('end', async () => {
             const searchParams = new URLSearchParams(data);
-            const newCat = Object.fromEntries(searchParams.entries());
+            const catResult = Object.fromEntries(searchParams.entries());
 
-            await saveCat(newCat);
+            if (req.url === '/cats/add-cat') {
+                await saveCat(catResult);
+                
+            } else if (req.url.startsWith('/cats/edit-cat')) {
+                const segments = req.url.split('/');
+                const catId = Number(segments.at(3));
+
+                await updateCat(catId, catResult);
+            }
+
 
             res. writeHead(302, {
                 'Location': '/'
@@ -30,33 +39,43 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    switch (req.url) {
-        case '/':
-            html = await homeView();
-            break;
+    if (req.url.startsWith('/cats/edit-cat')) {
+        const segments = req.url.split('/');
+        const catId = Number(segments.at(3));  
 
-        case '/cats/add-breed':
-            html = await addBreedView();
-            break;
-        
-        case '/cats/add-cat':
-            html = await addCatView();
-            break;
+        html = await editCatView(catId);
 
-        case '/styles/site.css':
-            const siteCss = await readFile('./src/styles/site.css');
+    } else {
 
-            res.writeHead(200, {
-                'content-type': 'text/css',
-                'cache-control': 'max-age=10'
-            });
-
-            res.write(siteCss);
-            return res.end();
-
-        default:
-            return res.end();
+        switch (req.url) {
+            case '/':
+                html = await homeView();
+                break;
+    
+            case '/cats/add-breed':
+                html = await addBreedView();
+                break;
+            
+            case '/cats/add-cat':
+                html = await addCatView();
+                break;
+    
+            case '/styles/site.css':
+                const siteCss = await readFile('./src/styles/site.css');
+    
+                res.writeHead(200, {
+                    'content-type': 'text/css',
+                    'cache-control': 'max-age=10' // Add caching  to the result
+                });
+    
+                res.write(siteCss);
+                return res.end();
+    
+            default:
+                return res.end();
+        }
     }
+
 
     res.writeHead(200, {
         'content-type': 'text/html'
@@ -97,6 +116,17 @@ async function addCatView() {
     return html;
 }
 
+async function editCatView(catId) {
+    const cat = await getCat(catId);
+    let html = await readFile('./src/views/editCat.html');
+
+    html = html.replaceAll('{{name}}', cat.name);
+    html = html.replaceAll('{{description}}', cat.description);
+    html = html.replaceAll('{{imageUrl}}', cat.imageUrl);
+
+    return html;
+}
+
 function catTemplate(cat) {
     return `
         <li>
@@ -105,7 +135,7 @@ function catTemplate(cat) {
             <p><span>Breed: </span>${cat.breed}</p>
             <p><span>Description: </span>${cat.description}</p>
             <ul class="buttons">
-                <li class="btn edit"><a href="">Change Info</a></li>
+                <li class="btn edit"><a href="/cats/edit-cat/${cat.id}">Change Info</a></li>
                 <li class="btn delete"><a href="">New Home</a></li>
             </ul>
         </li>

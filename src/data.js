@@ -11,10 +11,20 @@ export async function saveCat(cat) {
     // Add cat to cats array
     db.cats.push(cat);
 
-    // Serialize db
-    const dbSerialized = JSON.stringify(db, null, 2);
-
-    // Save cats array to filesystem
-    await fs.writeFile('./src/db.json', dbSerialized, {encoding: 'utf-8'});
+    await saveDb();
 }
 
+export async function getCat(id) {
+    return db.cats.find(cat => cat.id === id);
+    
+};
+
+export async function updateCat(catId, catData) {
+    db.cats = db.map(cat => cat.id === catId ? {id: catId, ...catData} : cat);
+    await saveDb();
+}
+
+async function saveDb() {
+    const dbSerialized = JSON.stringify(db, null, 2);
+    await fs.writeFile('./src/db.json', dbSerialized, {encoding: 'utf-8'});
+}
