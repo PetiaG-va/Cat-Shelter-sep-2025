@@ -47,7 +47,8 @@ const server = http.createServer(async (req, res) => {
             const siteCss = await readFile('./src/styles/site.css');
 
             res.writeHead(200, {
-                'content-type': 'text/css'
+                'content-type': 'text/css',
+                'cache-control': 'max-age=10'
             });
 
             res.write(siteCss);

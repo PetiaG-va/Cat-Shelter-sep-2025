@@ -20,5 +20,6 @@ SoftUni JS Back End Course Project
  - [x] Conditional rendering with cats
  - [x] Redirect to home page
  - [x] Add cats persistens
- - [] Add dynamic breeds
+ - [x] Cache CSS
+ - [ ] Add dynamic breeds
     
